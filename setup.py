@@ -7,6 +7,7 @@ requires = [
     'WebOb>=1.2.3',
     'blinker>=1.3',
     'Jinja2>=2.7.1',
+    'six>=1.3.0',
 ]
 if sys.version_info < (2, 7):
     requires.append('importlib>=1.0.2')
