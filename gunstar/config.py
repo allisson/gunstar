@@ -14,7 +14,6 @@ class Config(dict):
     def load_from_object(self, obj):
         if isinstance(obj, six.string_types):
             obj = import_from_string(obj)
-            print obj
         for key in dir(obj):
             if key.isupper():
                 self[key] = getattr(obj, key)
