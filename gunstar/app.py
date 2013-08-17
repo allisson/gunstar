@@ -2,6 +2,7 @@
 from gunstar.http import Request, Response
 from gunstar.routing import Router
 from gunstar.config import Config
+import six
 
 
 class Application(object):
@@ -23,5 +24,5 @@ class Application(object):
             return result(environ, start_response)
         else:
             self.res.status = 404
-            self.res.body = 'Not Found.'
+            self.res.text = six.u('Not Found.')
         return self.res(environ, start_response)
