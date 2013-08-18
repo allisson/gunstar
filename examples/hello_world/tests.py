@@ -1,24 +1,22 @@
 # -*- coding: utf-8 -*-
-import unittest
-from gunstar.http import Request
+from gunstar.testing import TestCase
 from app import app
 
 
-class AppTestCase(unittest.TestCase):
+class AppTestCase(TestCase):
     
+    def get_app(self):
+        return app
 
     def test_handlers(self):
-        req = Request.blank('/')
-        resp = req.get_response(app)
+        resp = self.client.get('/')
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('<h1>Hello Gunstar!</h1>'in resp.text)
 
-        req = Request.blank('/name/allisson/')
-        resp = req.get_response(app)
+        resp = self.client.get('/name/allisson/')
         self.assertEqual(resp.status_code, 200)
-        self.assertTrue('<h1>Hello allisson!</h1>'in resp.text)
+        self.assertTrue('<h1>Hello allisson!</h1>' in resp.text)
 
-        req = Request.blank('/crazy/url/')
-        resp = req.get_response(app)
+        resp = self.client.get('/crazy/url/')
         self.assertEqual(resp.status_code, 404)
         self.assertTrue('Not Found.' in resp.text)
