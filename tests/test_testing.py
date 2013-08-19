@@ -24,20 +24,45 @@ class Handler(RequestHandler):
 
     def head(self):
         self.response.write('METHOD ={0}'.format(self.request.method))
+
+
+class SessionHandler(RequestHandler):
+
+    def get(self):
+        if self.session.get('name'):
+            self.response.write('Get session name = {0}'.format(
+                self.session.get('name'))
+            )
+        else:
+            self.session.set('name', 'allisson')
+            self.session.save()
+            self.response.write('Set session name')
+
+
+class SessionHandler2(RequestHandler):
+
+    def get(self):
+        self.session.clear()
+        self.session.save()
+        self.response.write('Session is gone')
     
 
 routes = (
     (r'^$', Handler, 'index'),
+    (r'^session/$', SessionHandler, 'session'),
+    (r'^session2/$', SessionHandler2, 'session2'),
 )
 
 
-app = Application(routes=routes)
+class Settings(object):
+    SECRET_KEY = 'my-secret'
+
 
 
 class ClientTest(TestCase):
 
     def get_app(self):
-        return app
+        return Application(routes=routes, config=Settings)
 
     def test_get(self):
         resp = self.client.get('/')
@@ -178,3 +203,23 @@ class ClientTest(TestCase):
         self.assertEqual(resp.req.method, 'OPTIONS')
         self.assertEqual(resp.req.path, '/')
         self.assertEqual(resp.req.content_type, 'multipart/form-data')
+
+    def test_load_and_store_cookies(self):
+        self.assertFalse(self.client.cookies)
+
+        resp = self.client.get('/session/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.body, six.b('Set session name'))
+        self.assertTrue(self.client.cookies)
+        self.assertTrue('gsessionid' in self.client.cookies)
+
+        resp = self.client.get('/session/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.body, six.b('Get session name = allisson'))
+        self.assertTrue(self.client.cookies)
+        self.assertTrue('gsessionid' in self.client.cookies)
+
+        resp = self.client.get('/session2/')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.body, six.b('Session is gone'))
+        self.assertTrue(self.client.cookies)

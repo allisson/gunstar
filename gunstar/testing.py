@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 import six
+from six.moves import http_cookies
 from gunstar.http import Request
 
 try:
@@ -17,6 +18,7 @@ class Client(object):
 
     def __init__(self, app):
         self.app = app
+        self.cookies = {}
 
     def get(self, path, data={}, headers={}):
         return self.get_request(path, data=data, headers=headers)
@@ -46,7 +48,9 @@ class Client(object):
         req = Request.blank(path)
         req.method = method
         req.headers.update(headers)
+        self.load_cookies(req)
         resp = req.get_response(self.app)
+        self.store_cookies(resp)
         resp.req = req
         return resp
 
@@ -56,10 +60,24 @@ class Client(object):
         req.method = method
         req.body = six.b(urlencode(data))
         req.headers.update(headers)
+        self.load_cookies(req)
         resp = req.get_response(self.app)
+        self.store_cookies(resp)
         resp.req = req
         return resp
 
+    def store_cookies(self, resp):
+        cookies = http_cookies.SimpleCookie()
+        try:
+            cookies.load(resp.headers['Set-Cookie'])
+            for key in cookies:
+                self.cookies[key] = cookies[key].value
+        except:
+            pass
+
+    def load_cookies(self, req):
+        for key in self.cookies:
+            req.cookies[key] = self.cookies[key]
 
 class TestCase(unittest.TestCase):
 
