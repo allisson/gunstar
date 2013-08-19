@@ -14,6 +14,9 @@ class Application(object):
         self.config.load_from_object(DefaultConfig)
         self.config.load_from_object(config)
 
+    def load_config(self, config):
+        self.config.load_from_object(config)
+
     def __call__(self, environ, start_response):
         self.request = Request(environ)
         self.response = Response()

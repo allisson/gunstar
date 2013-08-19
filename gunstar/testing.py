@@ -66,7 +66,11 @@ class TestCase(unittest.TestCase):
     def get_app(self):
         raise NotImplementedError()
 
+    def _pre_setup(self):
+        self.app = self.get_app()
+        self.client = Client(self.app)
+
     def __call__(self, result=None):
-        self.client = Client(self.get_app())
+        self._pre_setup()
         super(TestCase, self).__call__(result)
 

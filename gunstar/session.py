@@ -55,11 +55,18 @@ class Session(object):
         self.data[key] = value
         self.modified = True
 
+    def delete(self, key):
+        self.data.pop(key, None)
+        self.modified = True
+
     def clear(self):
         self.data.clear()
         self.cleared = True
 
     def save(self):
+        if not self.secret_key:
+            return
+
         if self.cleared:
             self.response.delete_cookie(
                 self.session_cookie_name,

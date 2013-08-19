@@ -6,24 +6,35 @@ from gunstar.config import Config
 from gunstar.http import Request, Response
 
 
+class TestConfig(object):
+
+    KEY1 = 'key1'
+    key2 = 'key2'
+
+
 class ApplicationTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.app = Application()
     
     def test_init(self):
-        app = Application()
-        
         self.assertTrue(
-            isinstance(app.router, Router)
+            isinstance(self.app.router, Router)
         )
 
         self.assertTrue(
-            isinstance(app.config, Config)
+            isinstance(self.app.config, Config)
         )
+
+    def load_config(self):
+        self.app.load_config(TestConfig)
+        self.assertTrue('KEY1' in self.app.config)
+        self.assertFalse('key2' in self.app.config)
 
     def test_call(self):
-        app = Application()
         req = Request.blank('/article?id=1')
 
-        resp = req.get_response(app)
+        resp = req.get_response(self.app)
         self.assertTrue(isinstance(resp, Response))
         self.assertEqual(resp.status_code, 404)
         self.assertEqual(resp.text, 'Not Found.')
