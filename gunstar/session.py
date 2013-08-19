@@ -24,6 +24,9 @@ class Session(object):
         # init session
         self.get_session()
 
+    def get_max_age(self):
+        return self.max_age.seconds + (self.max_age.days * 24 * 3600)
+
     def get_cookie_domain(self):
         cookie_domain = self.session_cookie_domain
         if not cookie_domain:
@@ -44,7 +47,7 @@ class Session(object):
             return
         
         try:
-            self.data = s.loads(cookie_value, max_age=self.max_age.total_seconds())
+            self.data = s.loads(cookie_value, max_age=self.get_max_age())
         except BadSignature:
             return
 
