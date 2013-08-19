@@ -10,16 +10,6 @@ class ConfigObject(object):
 
 
 class ConfigTestCase(unittest.TestCase):
-    
-    def test_init(self):
-        data = {'KEY1': 'key1', 'key2': 'key2'}
-        config = Config(data)
-        self.assertTrue('KEY1' in config)
-        self.assertFalse('key2' in config)
-
-        data = ('key1', 'key2')
-        config = Config(data)
-        self.assertFalse(config)
 
     def test_load_from_object(self):
         config_object = ConfigObject()

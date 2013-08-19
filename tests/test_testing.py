@@ -2,15 +2,32 @@
 import six
 from gunstar.testing import TestCase
 from gunstar.app import Application
+from gunstar.http import RequestHandler
 
 
-def handler(req, res):
-    res.write('METHOD ={0}'.format(req.method))
-    return res
+class Handler(RequestHandler):
+    
+    def get(self):
+        self.response.write('METHOD ={0}'.format(self.request.method))
 
+    def post(self):
+        self.response.write('METHOD ={0}'.format(self.request.method))
+
+    def put(self):
+        self.response.write('METHOD ={0}'.format(self.request.method))
+
+    def delete(self):
+        self.response.write('METHOD ={0}'.format(self.request.method))
+
+    def options(self):
+        self.response.write('METHOD ={0}'.format(self.request.method))
+
+    def head(self):
+        self.response.write('METHOD ={0}'.format(self.request.method))
+    
 
 routes = (
-    (r'^$', handler, 'index'),
+    (r'^$', Handler, 'index'),
 )
 
 

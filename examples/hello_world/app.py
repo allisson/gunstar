@@ -6,18 +6,20 @@ import os.path
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
-config = {
-    'TEMPLATE_PATH': os.path.join(PROJECT_PATH, 'templates')
-}
+class ConfigSettings(object):
+    
+    TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
+    SECRET_KEY = 'my-secret-key'
+
 
 
 routes = (
-    (r'^$', 'views.index', 'index'),
-    (r'^name/([\w:-]+)/$', 'views.other', 'other'),
+    (r'^$', 'handlers.IndexHandler', 'index'),
+    (r'^name/([\w:-]+)/$', 'handlers.OtherHandler', 'other'),
 )
 
 
-app = Application(routes=routes, config=config)
+app = Application(routes=routes, config=ConfigSettings)
 
 
 if __name__ == '__main__':

@@ -11,6 +11,7 @@ requires = [
     'blinker>=1.3',
     'Jinja2>=2.7.1',
     'six>=1.3.0',
+    'itsdangerous>=0.23',
 ]
 if sys.version_info < (2, 7):
     requires.append('importlib>=1.0.2')

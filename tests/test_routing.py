@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 import unittest
 from gunstar.routing import Router, Route
+from gunstar.http import RequestHandler
 
 
-def handler(req, res):
-    res.write('Hello')
-    return res
+class Handler(RequestHandler):
+
+    def get(self):
+        self.response.write('Hello')
+
 
 routes = (
     (r'^$', 'views.index', 'index'),
     (r'^name/([\w:-]+)/$', 'views.other', 'other'),
 )
+
 
 class RouterTestCase(unittest.TestCase):
     
@@ -33,16 +37,16 @@ class RouterTestCase(unittest.TestCase):
     
     def test_add_route(self):
         self.assertEqual(len(self.router.routes), 0)
-        self.router.add_route(r'^$', handler, 'handler')
+        self.router.add_route(r'^$', Handler, 'handler')
         self.assertEqual(len(self.router.routes), 1)
         self.assertTrue(
             isinstance(self.router.routes[0], Route)
         )
         
     def test_find_route(self):
-        self.router.add_route(r'^$', handler, 'index')
-        self.router.add_route(r'^contact/$', handler, 'contact')
-        self.router.add_route(r'^posts/(?P<slug>[\w:-]+)/$', handler, 'post_detail')
+        self.router.add_route(r'^$', Handler, 'index')
+        self.router.add_route(r'^contact/$', Handler, 'contact')
+        self.router.add_route(r'^posts/(?P<slug>[\w:-]+)/$', Handler, 'post_detail')
         
         route = self.router.find_route('')
         self.assertTrue(route)
@@ -63,8 +67,8 @@ class RouterTestCase(unittest.TestCase):
 class RouteTestCase(unittest.TestCase):
     
     def test_resolve_func(self):
-        route = Route(r'^$', handler, 'index')
-        self.assertEqual(route.resolve_func(), handler)
+        route = Route(r'^$', Handler, 'index')
+        self.assertEqual(route.resolve_func(), Handler)
         
         from gunstar.utils import import_from_string
         route = Route(
@@ -75,18 +79,18 @@ class RouteTestCase(unittest.TestCase):
         self.assertEqual(route.resolve_func(), import_from_string)
         
     def test_get_args_kwargs(self):
-        route = Route(r'^$', handler, 'index')
+        route = Route(r'^$', Handler, 'index')
         args, kwargs = route.get_args_kwargs('')
         self.assertFalse(args)
         self.assertFalse(kwargs)
         
-        route = Route(r'^posts/(?P<slug>[\w:-]+)/$', handler, 'index')
+        route = Route(r'^posts/(?P<slug>[\w:-]+)/$', Handler, 'index')
         args, kwargs = route.get_args_kwargs('posts/my-post/')
         self.assertFalse(args)
         self.assertTrue(kwargs)
         self.assertTrue('slug' in kwargs)
         
-        route = Route(r'^posts/([\w:-]+)/$', handler, 'index')
+        route = Route(r'^posts/([\w:-]+)/$', Handler, 'index')
         args, kwargs = route.get_args_kwargs('posts/my-post/')
         self.assertTrue(args)
         self.assertTrue('my-post' in args)

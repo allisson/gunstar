@@ -1,15 +1,23 @@
 # -*- coding: utf-8 -*-
 import six
+from datetime import timedelta
 from gunstar.utils import import_from_string
 
 
-class Config(dict):
+class DefaultConfig(object):
+    
+    DEBUG = True
+    TESTING = False
+    SECRET_KEY = ''
+    SESSION_COOKIE_NAME = 'gsessionid'
+    SESSION_COOKIE_DOMAIN = None
+    SESSION_COOKIE_PATH = '/'
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SECURE = False
+    PERMANENT_SESSION_LIFETIME = timedelta(days=30)
 
-    def __init__(self, conf=None):
-        if isinstance(conf, dict):
-            for key in conf:
-                if key.isupper():
-                    self[key] = conf[key]
+
+class Config(dict):
 
     def load_from_object(self, obj):
         if isinstance(obj, six.string_types):
