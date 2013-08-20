@@ -34,6 +34,7 @@ class Route(object):
         self.name = name
         
     def resolve_func(self):
+        imported_func = None
         if isinstance(self.func, six.string_types):
             imported_func = import_from_string(self.func)
         elif six.callable(self.func):
