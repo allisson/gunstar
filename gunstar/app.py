@@ -20,13 +20,13 @@ class Application(object):
     def __call__(self, environ, start_response):
         self.request = Request(environ)
         self.response = Response()
-        path = self.request.path_info.lstrip('/')
+        path = self.request.path_info
         route = self.router.find_route(path)
         if route:
             func = route.resolve_func()
-            args, kwargs = route.get_args_kwargs(path)
+            args = route.get_args(path)
             handler = func(self, self.request, self.response)
-            handler.dispatch(*args, **kwargs)
+            handler.dispatch(*args)
             return handler.response(environ, start_response)
         else:
             self.response.status = 404

@@ -21,7 +21,7 @@ class Settings(object):
 
 
 routes = (
-    (r'^$', Handler, 'index'),
+    ('/', Handler, 'index'),
 )
 
 

@@ -48,9 +48,9 @@ class SessionHandler2(RequestHandler):
     
 
 routes = (
-    (r'^$', Handler, 'index'),
-    (r'^session/$', SessionHandler, 'session'),
-    (r'^session2/$', SessionHandler2, 'session2'),
+    ('/', Handler, 'index'),
+    ('/session/', SessionHandler, 'session'),
+    ('/session2/', SessionHandler2, 'session2'),
 )
 
 

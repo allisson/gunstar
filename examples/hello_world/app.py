@@ -14,8 +14,8 @@ class ConfigSettings(object):
 
 
 routes = (
-    (r'^$', 'handlers.IndexHandler', 'index'),
-    (r'^name/([\w:-]+)/$', 'handlers.OtherHandler', 'other'),
+    ('/', 'handlers.IndexHandler', 'index'),
+    ('/name/{name}/', 'handlers.OtherHandler', 'other'),
 )
 
 
