@@ -62,6 +62,29 @@ class RouterTestCase(unittest.TestCase):
         
         route = self.router.find_route('/other/url')
         self.assertFalse(route)
+
+    def test_find_route_by_name(self):
+        self.router.add_route('/', Handler, 'index')
+        self.router.add_route('/contact/', Handler, 'contact')
+        self.router.add_route('/posts/{slug:slug}/', Handler, 'post_detail')
+
+        route = self.router.find_route_by_name('index')
+        self.assertTrue(route)
+        self.assertTrue(isinstance(route, Route))
+        self.assertEqual(route.pattern, '/')
+
+        route = self.router.find_route_by_name('contact')
+        self.assertTrue(route)
+        self.assertTrue(isinstance(route, Route))
+        self.assertEqual(route.pattern, '/contact/')
+
+        route = self.router.find_route_by_name('post_detail')
+        self.assertTrue(route)
+        self.assertTrue(isinstance(route, Route))
+        self.assertEqual(route.pattern, '/posts/{slug:slug}/')
+
+        route = self.router.find_route_by_name('other_url')
+        self.assertFalse(route)
         
 
 class RouteTestCase(unittest.TestCase):

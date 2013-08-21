@@ -25,6 +25,12 @@ class Router(object):
                 return route
         return None
 
+    def find_route_by_name(self, name):
+        for route in self.routes:
+            if route.name == name:
+                return route
+        return None
+
 
 GET_TOKEN_RE = r'{([^}]+)}'
 DEFAULT_TOKEN_RE = '([^/]+)'
