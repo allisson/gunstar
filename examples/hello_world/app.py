@@ -10,6 +10,8 @@ class ConfigSettings(object):
     
     TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
     SECRET_KEY = 'my-secret-key'
+    STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
+    STATIC_PATH = '/static/'
 
 
 

@@ -37,6 +37,7 @@ DEFAULT_TOKEN_RE = '([^/]+)'
 INT_TOKEN_RE = '([\d]+)'
 STRING_TOKEN_RE = '([\w]+)'
 SLUG_TOKEN_RE = '([\w-]+)'
+PATH_TOKEN_RE = '([^/].*?)'
 
 
 class Route(object):
@@ -73,6 +74,8 @@ class Route(object):
                 return STRING_TOKEN_RE
             elif parser == 'slug':
                 return SLUG_TOKEN_RE
+            elif parser == 'path':
+                return PATH_TOKEN_RE
         elif len(token.split(':')) == 3:
             token_name, parser, options = token.split(':')
             if parser == 're':

@@ -126,6 +126,12 @@ class RouteTestCase(unittest.TestCase):
             '^/([\W]+)/$'
         )
 
+        route = Route('/{name:path}/', Handler, 'index')
+        self.assertEqual(
+            route.regex_pattern,
+            '^/([^/].*?)/$'
+        )
+
     def test_resolve_func(self):
         route = Route('/', Handler, 'index')
         self.assertEqual(route.resolve_func(), Handler)
@@ -159,6 +165,10 @@ class RouteTestCase(unittest.TestCase):
         self.assertTrue(args)
         self.assertTrue('@allisson' in args)
 
+        route = Route('/wiki/{name:path}/', Handler, 'index')
+        args = route.get_args('/wiki/Allisson/Detail/')
+        self.assertTrue(args)
+        self.assertTrue('Allisson/Detail' in args)
 
     def test_reverse_route(self):
         route = Route('/', Handler, 'index')
@@ -175,3 +185,7 @@ class RouteTestCase(unittest.TestCase):
         route = Route('/user/{user:re:([\w@]+)}/', Handler, 'index')
         self.assertEqual(
             route.reverse_route('@allisson'), '/user/@allisson/')
+
+        route = Route('/wiki/{name:path}/', Handler, 'index')
+        self.assertEqual(
+            route.reverse_route('Allisson/Detail'), '/wiki/Allisson/Detail/')

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from webob import Request, Response
+from webob.static import DirectoryApp
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from gunstar.session import Session
 

@@ -8,6 +8,7 @@ class DefaultConfig(object):
     
     DEBUG = True
     TESTING = False
+
     SECRET_KEY = ''
     SESSION_COOKIE_NAME = 'gsessionid'
     SESSION_COOKIE_DOMAIN = None
@@ -15,6 +16,9 @@ class DefaultConfig(object):
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SECURE = False
     PERMANENT_SESSION_LIFETIME = timedelta(days=30)
+
+    STATIC_ROOT = ''
+    STATIC_PATH = ''
 
 
 class Config(dict):

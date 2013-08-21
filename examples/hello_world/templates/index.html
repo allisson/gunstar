@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Hello World {{ name }}</title>
+    <title>Hello World</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-wip/css/bootstrap.min.css">
   </head>
 
@@ -14,7 +14,11 @@
     <div class="container">
 
       <div class="page-header">
-        <h1>Hello {{name}}!</h1>
+        {% if name %}
+          <h1>Hello {{ name }}!</h1>
+        {% else %}
+          <h1>Hello!</h1>
+        {% endif %}
       </div>
 
     </div><!-- /.container -->
