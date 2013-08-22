@@ -20,6 +20,9 @@ class DefaultConfig(object):
     STATIC_ROOT = ''
     STATIC_PATH = ''
 
+    HANDLER_FOR_404 = 'gunstar.http.NotFoundHandler'
+    HANDLER_FOR_500 = 'gunstar.http.ErrorHandler'
+
 
 class Config(dict):
 

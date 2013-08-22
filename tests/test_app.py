@@ -37,4 +37,4 @@ class ApplicationTestCase(unittest.TestCase):
         resp = req.get_response(self.app)
         self.assertTrue(isinstance(resp, Response))
         self.assertEqual(resp.status_code, 404)
-        self.assertEqual(resp.text, 'Not Found.')
+        self.assertTrue('Not Found /article' in  resp.text)

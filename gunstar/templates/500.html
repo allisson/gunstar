@@ -1,0 +1,22 @@
+{% extends 'base_gunstar.html' %}
+
+{% block title %}We found a error :({% endblock %}
+
+{% block container %}
+  <div class="page-header">
+    <h1>We found a error :(</h1>
+  </div>
+
+<div class="panel panel-default">
+
+  <div class="panel-heading">
+    <h3 class="panel-title">Traceback</h3>
+  </div>
+  <ul class="list-group">
+    {% for line in traceback %}
+    <li class="list-group-item">{{ line }}</li>
+    {% endfor %}
+  </ul>
+
+</div>
+{% endblock %}

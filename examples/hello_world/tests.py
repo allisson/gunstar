@@ -23,4 +23,4 @@ class AppTestCase(TestCase):
 
         resp = self.client.get('/crazy/url/')
         self.assertEqual(resp.status_code, 404)
-        self.assertTrue('Not Found.' in resp.text)
+        self.assertTrue('Not Found /crazy/url/' in resp.text)
