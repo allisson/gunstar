@@ -20,6 +20,7 @@ class RequestHandler(object):
         self.request = request
         self.response = response
         self.session = Session(self.app, self.request, self.response)
+        self.template_env = self.create_template_env()
 
     def dispatch(self, *args, **kwargs):
         if self.request.method.lower() in self.http_method_names:
@@ -32,19 +33,36 @@ class RequestHandler(object):
         self.response.status_code = 405
         self.response.write('Method Not Allowed.')
 
-    def render_template(self, template_name, **kwargs):
+    def get_template_globals(self):
+        template_globals = {
+            'handler': self,
+            'config': self.app.config,
+            'request': self.request,
+        }
+        return template_globals
+
+    def get_template_filters(self):
+        template_filters = {}
+        return template_filters
+
+    def create_template_env(self):
         template_dirs = [
             GUNSTAR_TEMPLATE_PATH,
         ]
         if self.app.config.get('TEMPLATE_PATH', None):
             template_dirs.append(self.app.config['TEMPLATE_PATH'])
-        env = Environment(
+        template_env = Environment(
             loader=FileSystemLoader(template_dirs),
             extensions=['jinja2.ext.autoescape', 'jinja2.ext.with_'],
             autoescape=True
         )
+        template_env.globals.update(self.get_template_globals())
+        template_env.filters.update(self.get_template_filters())
+        return template_env
+
+    def render_template(self, template_name, **kwargs):
         try:
-            template = env.get_template(template_name)
+            template = self.template_env.get_template(template_name)
         except TemplateNotFound:
             raise TemplateNotFound(template_name)
         self.response.text = template.render(kwargs)
