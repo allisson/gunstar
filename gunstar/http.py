@@ -39,6 +39,7 @@ class RequestHandler(object):
             'handler': self,
             'config': self.app.config,
             'request': self.request,
+            'reverse_route': self.reverse_route,
         }
         return template_globals
 
@@ -66,6 +67,16 @@ class RequestHandler(object):
         except TemplateNotFound:
             raise TemplateNotFound(template_name)
         self.response.text = template.render(kwargs)
+
+    def reverse_route(self, name, *args):
+        url = ''
+        route = self.app.router.find_route_by_name(name)
+        if route:
+            reverse = route.reverse_route(*args)
+            if reverse:
+                url = reverse
+        return url
+
 
 
 class NotFoundHandler(RequestHandler):
