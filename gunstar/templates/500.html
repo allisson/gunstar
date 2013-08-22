@@ -1,22 +1,26 @@
 {% extends 'base_gunstar.html' %}
 
-{% block title %}We found a error :({% endblock %}
+{% block title %}Internal Server Error{% endblock %}
 
 {% block container %}
   <div class="page-header">
-    <h1>We found a error :(</h1>
+    <h1>Internal Server Error</h1>
   </div>
+  <p>The server encountered an internal error or misconfiguration and was unable to complete your request. We're working on resolving this error. Please check back in a bit.</p>
 
-<div class="panel panel-default">
+  {% if config['DEBUG'] %}
+  <br><br>
+  <div class="panel panel-default">
 
-  <div class="panel-heading">
-    <h3 class="panel-title">Traceback</h3>
-  </div>
-  <ul class="list-group">
-    {% for line in traceback %}
-    <li class="list-group-item">{{ line }}</li>
-    {% endfor %}
-  </ul>
+    <div class="panel-heading">
+      <h3 class="panel-title">Traceback</h3>
+    </div>
+    <ul class="list-group">
+      {% for line in traceback %}
+      <li class="list-group-item">{{ line }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
 </div>
 {% endblock %}

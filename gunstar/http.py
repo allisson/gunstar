@@ -4,6 +4,7 @@ from webob.static import DirectoryApp
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 import traceback
 from gunstar.session import Session
+from gunstar.template import linebreaks, linebreaksbr
 import os.path
 
 
@@ -42,7 +43,7 @@ class RequestHandler(object):
         return template_globals
 
     def get_template_filters(self):
-        template_filters = {}
+        template_filters = {'linebreaks': linebreaks, 'linebreaksbr': linebreaksbr}
         return template_filters
 
     def create_template_env(self):
