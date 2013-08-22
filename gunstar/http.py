@@ -47,11 +47,10 @@ class RequestHandler(object):
         return template_filters
 
     def create_template_env(self):
-        template_dirs = [
-            GUNSTAR_TEMPLATE_PATH,
-        ]
+        template_dirs = []
         if self.app.config.get('TEMPLATE_PATH', None):
             template_dirs.append(self.app.config['TEMPLATE_PATH'])
+        template_dirs.append(GUNSTAR_TEMPLATE_PATH)
         template_env = Environment(
             loader=FileSystemLoader(template_dirs),
             extensions=['jinja2.ext.autoescape', 'jinja2.ext.with_'],
