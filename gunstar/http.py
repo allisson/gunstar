@@ -5,6 +5,7 @@ from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 import traceback
 from gunstar.session import Session
 from gunstar.template import linebreaks, linebreaksbr
+from gunstar.signals import template_rendered_signal
 import os.path
 
 
@@ -66,7 +67,11 @@ class RequestHandler(object):
             template = self.template_env.get_template(template_name)
         except TemplateNotFound:
             raise TemplateNotFound(template_name)
-        self.response.text = template.render(kwargs)
+        template_rendered = template.render(kwargs)
+        template_rendered_signal.send(
+            self.app, handler=self, template=template_rendered, context=kwargs
+        )
+        self.response.text = template_rendered
 
     def reverse_route(self, name, *args):
         url = ''

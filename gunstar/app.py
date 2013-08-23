@@ -3,6 +3,9 @@ from gunstar.http import Request, Response, DirectoryApp
 from gunstar.routing import Router
 from gunstar.config import Config, DefaultConfig
 from gunstar.utils import import_from_string
+from gunstar.signals import (
+    request_started_signal, request_finished_signal, request_exception_signal
+    )
 import sys
 
 
@@ -36,6 +39,7 @@ class Application(object):
 
     def __call__(self, environ, start_response):
         self.request = Request(environ)
+        request_started_signal.send(self, request=self.request)
         self.response = Response()
         path = self.request.path_info
         route = self.router.find_route(path)
@@ -51,9 +55,11 @@ class Application(object):
                 args = route.get_args(path)
                 handler = func(self, self.request, self.response)
                 handler.dispatch(*args)
+                request_finished_signal.send(self, response=handler.response)
                 return handler.response(environ, start_response)
             except Exception:
                 exc_info=sys.exc_info()
+                request_exception_signal.send(self, request=self.request, exc_info=exc_info)
                 handler_500 = self.handler500(self, self.request, self.response)
                 handler_500.dispatch(exc_info)
                 return handler_500.response(environ, start_response)
