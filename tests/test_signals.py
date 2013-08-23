@@ -39,6 +39,8 @@ routes = (
 
 class SignalsTest(TestCase):
 
+    signal_received = None
+
     def get_app(self):
         self.app = Application(routes=routes, config=Settings)
         return self.app

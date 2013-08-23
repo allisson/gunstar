@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 import six
+import os
 from gunstar.testing import TestCase
 from gunstar.app import Application
 from gunstar.http import RequestHandler
+
+
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 class Handler(RequestHandler):
@@ -45,18 +49,25 @@ class SessionHandler2(RequestHandler):
         self.session.clear()
         self.session.save()
         self.response.write('Session is gone')
+
+
+class SessionHandler3(RequestHandler):
+
+    def get(self):
+        self.render_template('index.html', name='allisson')
     
 
 routes = (
     ('/', Handler, 'index'),
     ('/session/', SessionHandler, 'session'),
     ('/session2/', SessionHandler2, 'session2'),
+    ('/session3/', SessionHandler3, 'session3'),
 )
 
 
 class Settings(object):
     SECRET_KEY = 'my-secret'
-
+    TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
 
 
 class ClientTest(TestCase):
@@ -223,3 +234,15 @@ class ClientTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.body, six.b('Session is gone'))
         self.assertTrue(self.client.cookies)
+
+    def test_template_and_context_in_response(self):
+
+        resp = self.client.get('/session3/')
+        self.assertTrue(resp.template)
+        self.assertTrue(resp.context)
+        self.assertEqual(resp.template, resp.text)
+        self.assertEqual(resp.context['name'], 'allisson')
+
+        resp = self.client.get('/session2/')
+        self.assertFalse(resp.template)
+        self.assertFalse(resp.context)

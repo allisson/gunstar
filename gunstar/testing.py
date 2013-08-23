@@ -3,6 +3,7 @@ import unittest
 import six
 from six.moves import http_cookies
 from gunstar.http import Request
+from gunstar.signals import template_rendered_signal
 
 try:
     from urllib.parse import urlencode
@@ -19,6 +20,9 @@ class Client(object):
     def __init__(self, app):
         self.app = app
         self.cookies = {}
+        self.template = None
+        self.context = None
+        template_rendered_signal.connect(self.receive_template_rendered_signal)
 
     def get(self, path, data={}, headers={}):
         return self.get_request(path, data=data, headers=headers)
@@ -52,6 +56,10 @@ class Client(object):
         resp = req.get_response(self.app)
         self.store_cookies(resp)
         resp.request_started = req
+        resp.template = self.template
+        resp.context = self.context
+        self.template = None
+        self.context = None
         return resp
 
     def post_request(self, path, data={}, headers={}, content_type='', method='POST'):
@@ -64,6 +72,10 @@ class Client(object):
         resp = req.get_response(self.app)
         self.store_cookies(resp)
         resp.request_started = req
+        resp.template = self.template
+        resp.context = self.context
+        self.template = None
+        self.context = None
         return resp
 
     def store_cookies(self, resp):
@@ -78,6 +90,11 @@ class Client(object):
     def load_cookies(self, req):
         for key in self.cookies:
             req.cookies[key] = self.cookies[key]
+
+    def receive_template_rendered_signal(self, app, handler, template, context):
+        self.template = template
+        self.context = context
+
 
 class TestCase(unittest.TestCase):
 
