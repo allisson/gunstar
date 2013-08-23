@@ -51,7 +51,7 @@ class Client(object):
         self.load_cookies(req)
         resp = req.get_response(self.app)
         self.store_cookies(resp)
-        resp.req = req
+        resp.request_started = req
         return resp
 
     def post_request(self, path, data={}, headers={}, content_type='', method='POST'):
@@ -63,7 +63,7 @@ class Client(object):
         self.load_cookies(req)
         resp = req.get_response(self.app)
         self.store_cookies(resp)
-        resp.req = req
+        resp.request_started = req
         return resp
 
     def store_cookies(self, resp):
