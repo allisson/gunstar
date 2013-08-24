@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from gunstar.app import Application
-import os.path
+import os
 
 
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -12,7 +12,6 @@ class ConfigSettings(object):
     SECRET_KEY = 'my-secret-key'
     STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
     STATIC_PATH = '/static/'
-
 
 
 routes = (

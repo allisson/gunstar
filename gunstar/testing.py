@@ -58,8 +58,7 @@ class Client(object):
         resp.request_started = req
         resp.template = self.template
         resp.context = self.context
-        self.template = None
-        self.context = None
+        self.template = self.context= None
         return resp
 
     def post_request(self, path, data={}, headers={}, content_type='', method='POST'):
@@ -74,8 +73,7 @@ class Client(object):
         resp.request_started = req
         resp.template = self.template
         resp.context = self.context
-        self.template = None
-        self.context = None
+        self.template = self.context= None
         return resp
 
     def store_cookies(self, resp):

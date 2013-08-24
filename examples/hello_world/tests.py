@@ -16,6 +16,7 @@ class AppTestCase(TestCase):
         resp = self.client.get('/name/allisson/')
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('<h1>Hello allisson!</h1>' in resp.text)
+        self.assertTrue(resp.context['name'], 'allisson')
 
         resp = self.client.get('/static/index.html')
         self.assertEqual(resp.status_code, 200)
