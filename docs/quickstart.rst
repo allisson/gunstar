@@ -1,7 +1,9 @@
 Quickstart
 ============
 
-Let's start, create a new project structure for myapp::
+Let's start, create a new project structure for myapp
+
+.. code-block:: bash
 
     mkdir myapp
     cd myapp
@@ -11,7 +13,9 @@ Let's start, create a new project structure for myapp::
     touch handlers.py # handlers classes
     touch tests.py # for testing the app
 
-Now, edit the content of app.py file::
+Now, edit the content of app.py file
+
+.. code-block:: python
 
     # -*- coding: utf-8 -*-
     from gunstar.app import Application
@@ -25,14 +29,18 @@ Now, edit the content of app.py file::
         server = make_server('127.0.0.1', 8080, myapp)
         server.serve_forever()
         
-Running a development server::
+Running a development server
+
+.. code-block:: bash
 
     python app.py
     
 Go to your browser and visit http://127.0.0.1:8080, you see a 404 page.
 
 
-It's time to create your first request handler class, go to handlers.py and edit::
+It's time to create your first request handler class, go to handlers.py and edit
+
+.. code-block:: python
 
     # -*- coding: utf-8 -*-
     from gunstar.http import RequestHandler
@@ -44,7 +52,9 @@ It's time to create your first request handler class, go to handlers.py and edit
             self.response.write('Index Handler')
 
 
-Go back to app.py and create routes tuple::
+Go back to app.py and create routes tuple
+
+.. code-block:: python
 
     # -*- coding: utf-8 -*-
     from gunstar.app import Application
@@ -74,7 +84,9 @@ Congratulations, your first app is working now!
 Working with templates
 ======================
 
-We need to set up a TEMPLATE_PATH variable in config::
+We need to set up a TEMPLATE_PATH variable in config
+
+.. code-block:: python
 
     # -*- coding: utf-8 -*-
     from gunstar.app import Application
@@ -102,7 +114,9 @@ We need to set up a TEMPLATE_PATH variable in config::
         server = make_server('127.0.0.1', 8080, myapp)
         server.serve_forever()
         
-Create file templates/index.html::
+Create file templates/index.html
+
+.. code-block:: html
 
     <!DOCTYPE html>
     <html lang="en">
@@ -122,7 +136,9 @@ Create file templates/index.html::
       </body>
     </html>
 
-Edit handlers.py to use render_template::
+Edit handlers.py to use render_template
+
+.. code-block:: python 
 
     # -*- coding: utf-8 -*-
     from gunstar.http import RequestHandler
@@ -139,15 +155,19 @@ Restart your development server and visit http://127.0.0.1:8080.
 Serving static files
 ======================
 
-Set STATIC_PATH and STATIC_ROOT in config::
+Set STATIC_PATH and STATIC_ROOT in config
     
+.. code-block:: python    
+
     class ConfigSettings(object):
     
         TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
         STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
         STATIC_PATH = '/static/'
 
-Create static/index.html::
+Create static/index.html
+
+.. code-block:: html
 
     <!DOCTYPE html>
     <html lang="en">
@@ -198,7 +218,9 @@ Edit handlers.py::
             self.session.save()
             self.render_template('index.html', view_count=view_count)
             
-Edit templates/index.html::
+Edit templates/index.html
+
+.. code-block:: html
 
     <!DOCTYPE html>
     <html lang="en">
