@@ -268,9 +268,9 @@ Edit tests.py::
 And run nose to call the tests::
     
     nosetests
-    .
+    ..
     ----------------------------------------------------------------------
-    Ran 1 test in 0.117s
+    Ran 2 tests in 0.166s
 
     OK
     
