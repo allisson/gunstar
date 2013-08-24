@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
 import sys
+import gunstar
 
-version = '0.1'
+version = gunstar.__version__
 
 testing_extras = ['nose', 'coverage']
 
@@ -18,7 +19,7 @@ if sys.version_info < (2, 7):
 
 
 setup(
-    name='Gunstar',
+    name='gunstar',
     version=version,
     author='Allisson Azevedo',
     author_email='allisson@gmail.com',
@@ -29,6 +30,19 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=requires,
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: Implementation :: PyPy',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Topic :: Software Development :: Libraries :: Python Modules'
+    ],
     test_suite='nose.collector',
     tests_require=['nose'],
     extras_require = {

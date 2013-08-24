@@ -135,6 +135,39 @@ Edit handlers.py to use render_template::
     
 Restart your development server and visit http://127.0.0.1:8080. 
 
+======================
+Serving static files
+======================
+
+Set STATIC_PATH and STATIC_ROOT in config::
+    
+    class ConfigSettings(object):
+    
+        TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
+        STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
+        STATIC_PATH = '/static/'
+
+Create static/index.html::
+
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MyApp - Index</title>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+      </head>
+
+      <body>
+
+        <div class="container">
+          Index from static files.
+        </div>
+
+      </body>
+    </html>
+    
+Restart your development server and visit http://127.0.0.1:8080/static/index.html. 
 
 ======================
 Working with session
@@ -142,32 +175,13 @@ Working with session
 
 The session is available in RequestHandler.session if you set SECRET_KEY in config::
 
-    # -*- coding: utf-8 -*-
-    from gunstar.app import Application
-    import os
-
-
-    PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-
-
     class ConfigSettings(object):
     
         TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
+        STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
+        STATIC_PATH = '/static/'
         SECRET_KEY = 'my-secret-key'
 
-
-    routes = (
-        ('/', 'handlers.IndexHandler', 'index'),
-    )
-
-
-    myapp = Application(routes=routes, config=ConfigSettings)
-
-
-    if __name__ == '__main__':
-        from wsgiref.simple_server import make_server
-        server = make_server('127.0.0.1', 8080, myapp)
-        server.serve_forever()
         
 Edit handlers.py::
 
@@ -244,6 +258,11 @@ Edit tests.py::
             resp = self.client.get('/')
             self.assertEqual(resp.status_code, 200)
             self.assertEqual(resp.context['view_count'], 3)
+        
+        def test_static_file(self):
+            resp = self.client.get('/static/index.html')
+            self.assertEqual(resp.status_code, 200)
+            self.assertTrue('<h1>Index from static files.</h1>' in resp.text)
     
     
 And run nose to call the tests::
