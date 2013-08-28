@@ -31,6 +31,10 @@ class ApplicationTestCase(unittest.TestCase):
         self.assertTrue('KEY1' in self.app.config)
         self.assertFalse('key2' in self.app.config)
 
+    def test_add_route(self):
+        self.app.add_route('/test/', 'handlers.TestHandler', 'test')
+        self.assertTrue(self.app.router.find_route('/test/'))
+
     def test_call(self):
         req = Request.blank('/article?id=1')
 

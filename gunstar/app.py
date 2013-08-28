@@ -37,6 +37,9 @@ class Application(object):
     def load_config(self, config):
         self.config.load_from_object(config)
 
+    def add_route(self, pattern, handler, name):
+        self.router.add_route(pattern, handler, name)
+
     def __call__(self, environ, start_response):
         self.request = Request(environ)
         request_started_signal.send(self, request=self.request)
