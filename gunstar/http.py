@@ -26,14 +26,26 @@ class RequestHandler(object):
 
     def dispatch(self, *args, **kwargs):
         if self.request.method.lower() in self.http_method_names:
-            handler = getattr(self, self.request.method.lower(), self.http_method_not_allowed)
+            handler = getattr(self, self.request.method.lower(), None)
+            if not handler:
+                return self.abort(405, 'Method Not Allowed.')
+            return handler(*args, **kwargs)
         else:
-            handler = self.http_method_not_allowed
-        return handler(*args, **kwargs)
+            return self.abort(405, 'Method Not Allowed.')
 
-    def http_method_not_allowed(self, *args, **kwargs):
-        self.response.status_code = 405
-        self.response.write('Method Not Allowed.')
+    def abort(self, code, message=None):
+        self.response.status_code = code
+        if not message:
+            message = 'Returned Status Code = {0}'.format(code)
+        self.response.write(message)
+
+    def redirect(self, redirect_url, permanent=False, status_code=302):
+        message = 'The resource has been moved to {0}'.format(redirect_url)
+        if permanent:
+            status_code = 301
+        self.response.status_code = status_code
+        self.response.location = redirect_url
+        self.response.write(message)
 
     def get_template_globals(self):
         template_globals = {
