@@ -181,7 +181,7 @@ Create static/index.html
       <body>
 
         <div class="container">
-          Index from static files.
+          <h1>Index from static files.</h1>
         </div>
 
       </body>
