@@ -50,7 +50,7 @@ Login Example
         def post(self):
             username = self.request.POST.get('username', None)
             password = self.request.POST.get('password', None)
-            user = get_user_by_username_and_password(username, password)
+            user = your_code_to_get_user_by_username_and_password(username, password)
             if user:
                 self.session.set('user_id', user.id)
                 self.session.save()
@@ -76,6 +76,6 @@ Login Example
             user_id = self.session.get('user_id', None)
             if not user_id:
                 self.redirect('/login/')
-            user = get_user_by_user_id(user_id)
+            user = your_code_to_get_user_by_user_id(user_id)
             self.render_template('index.html', user=user)
 
