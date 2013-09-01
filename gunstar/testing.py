@@ -11,10 +11,6 @@ except ImportError:
     from urllib import urlencode
 
 
-BOUNDARY = 'BoUnDaRyStRiNg'
-MULTIPART_CONTENT = 'multipart/form-data; boundary=%s' % BOUNDARY
-
-
 class Client(object):
 
     def __init__(self, app):
@@ -27,7 +23,7 @@ class Client(object):
     def get(self, path, data={}, headers={}):
         return self.get_request(path, data=data, headers=headers)
 
-    def post(self, path, data={}, headers={}, content_type=MULTIPART_CONTENT):
+    def post(self, path, data={}, headers={}, content_type='application/x-www-form-urlencoded'):
         return self.post_request(path, data=data, headers=headers, 
             content_type=content_type, method='POST')
 
