@@ -24,14 +24,30 @@ class RequestHandler(object):
         self.session = Session(self.app, self.request, self.response)
         self.template_env = self.create_template_env()
 
+    def before_dispatch(self):
+        pass
+
     def dispatch(self, *args, **kwargs):
+        # call before dispatch
+        self.before_dispatch()
+        
+        # flag to control method not allowed error
+        handler_executed = False
+
         if self.request.method.lower() in self.http_method_names:
             handler = getattr(self, self.request.method.lower(), None)
-            if not handler:
-                return self.abort(405, 'Method Not Allowed.')
-            return handler(*args, **kwargs)
-        else:
-            return self.abort(405, 'Method Not Allowed.')
+            if handler:
+                handler_executed = True                
+                handler(*args, **kwargs)
+
+        if not handler_executed:
+            self.abort(405, 'Method Not Allowed.')
+        
+        # call after dispatch
+        self.after_dispatch()
+
+    def after_dispatch(self):
+        pass
 
     def abort(self, code, message=None):
         self.response.status_code = code
