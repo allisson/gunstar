@@ -4,6 +4,22 @@ Gunstar Changelog
 Here you can see the full list of changes between each Gunstar release.
 
 
+Version 0.2.2
+-------------
+
+Released on 2013-09-06.
+
+- before_dispatch and after_dispatch implemented in RequestHandler.
+
+
+Version 0.2.1
+-------------
+
+Released on 2013-09-02.
+
+- Pip installation fixed.
+
+
 Version 0.2
 -----------
 
