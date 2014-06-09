@@ -9,6 +9,14 @@ Gunstar is a WSGI micro web framework.
 
 `Github Repo <http://github.com/allisson/gunstar/>`_.
 
+.. image:: https://travis-ci.org/allisson/gunstar.png?branch=master
+    :target: https://travis-ci.org/allisson/gunstar
+    :alt: Build Status - Travis CI
+
+.. image:: https://coveralls.io/repos/allisson/gunstar/badge.png?branch=master
+    :target: https://coveralls.io/r/allisson/gunstar?branch=master
+
+
 =================
 Features
 =================
@@ -19,7 +27,7 @@ Features
 * Session interface with signed cookies.
 * `Signals with blinker <http://pythonhosted.org/blinker/>`_.
 * Unit testing support.
-* `Supports Python 2.6, 2.7, 3.3 and PyPy <http://travis-ci.org/allisson/gunstar>`_.
+* `Supports Python 2.6, 2.7, 3.3, 3.4 and PyPy <http://travis-ci.org/allisson/gunstar>`_.
 
 
 =================
