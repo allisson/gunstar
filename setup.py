@@ -3,12 +3,21 @@ from setuptools import setup
 import sys
 import gunstar
 
+try:
+    import multiprocessing
+except ImportError:
+    pass
+
 version = gunstar.__version__
 
-testing_extras = ['nose', 'coverage']
+testing_extras = [
+    'nose',
+    'coverage',
+    'coveralls'
+]
 
 requires = [
-    'WebOb>=1.2.3',
+    'WebOb>=1.4',
     'blinker>=1.3',
     'Jinja2>=2.7.1',
     'six>=1.3.0',
@@ -40,13 +49,14 @@ setup(
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     test_suite='nose.collector',
     tests_require=['nose'],
-    extras_require = {
+    extras_require={
         'testing': testing_extras,
     },
 )
