@@ -20,45 +20,52 @@ class Client(object):
         self.context = None
         template_rendered_signal.connect(self.receive_template_rendered_signal)
 
-    def get(self, path, data={}, headers={}):
+    def get(self, path, data=None, headers=None):
         return self.get_request(path, data=data, headers=headers)
 
-    def post(self, path, data={}, headers={},
+    def post(self, path, data=None, headers=None,
              content_type='application/x-www-form-urlencoded'):
         return self.post_request(
             path, data=data, headers=headers,
             content_type=content_type, method='POST'
         )
 
-    def put(self, path, data={}, headers={},
+    def put(self, path, data=None, headers=None,
             content_type='application/octet-stream'):
         return self.post_request(
             path, data=data, headers=headers,
             content_type=content_type, method='PUT'
         )
 
-    def delete(self, path, data={}, headers={},
+    def delete(self, path, data=None, headers=None,
                content_type='application/octet-stream'):
         return self.post_request(
             path, data=data, headers=headers,
             content_type=content_type, method='DELETE'
         )
 
-    def options(self, path, data={}, headers={},
+    def options(self, path, data=None, headers=None,
                 content_type='application/octet-stream'):
         return self.post_request(
             path, data=data, headers=headers,
             content_type=content_type, method='OPTIONS'
         )
 
-    def head(self, path, data={}, headers={}):
+    def head(self, path, data=None, headers=None):
         return self.get_request(
             path, data=data, headers=headers, method='HEAD'
         )
 
-    def get_request(self, path, data={}, headers={}, method='GET'):
+    def get_request(self, path, data=None, headers=None, method='GET'):
+        if data is None:
+            data = {}
+
+        if headers is None:
+            headers = {}
+
         if data:
             path = path + '?' + urlencode(data)
+
         req = Request.blank(path)
         req.method = method
         req.headers.update(headers)
@@ -71,8 +78,14 @@ class Client(object):
         self.template = self.context = None
         return resp
 
-    def post_request(self, path, data={}, headers={}, content_type='',
+    def post_request(self, path, data=None, headers=None, content_type='',
                      method='POST'):
+        if data is None:
+            data = {}
+
+        if headers is None:
+            headers = {}
+
         req = Request.blank(path)
         req.content_type = content_type
         req.method = method
