@@ -2,10 +2,7 @@
 import unittest
 import six
 from six.moves import http_cookies
-try:
-    from urllib.parse import urlencode
-except ImportError:
-    from urllib import urlencode
+from six.moves.urllib.parse import urlencode
 
 from gunstar.http import Request
 from gunstar.signals import template_rendered_signal
