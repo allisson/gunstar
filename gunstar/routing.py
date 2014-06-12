@@ -1,21 +1,22 @@
 # -*- coding: utf-8 -*-
 import re
 import six
+
 from gunstar.utils import import_from_string
 
 
 class Router(object):
-    
+
     routes = ()
 
     def __init__(self, routes=None):
         if isinstance(routes, tuple):
             for route in routes:
                 self.add_route(route[0], route[1], route[2])
-        
+
     def add_route(self, pattern, func, name):
-        self.routes += ( 
-            Route(pattern, func, name), 
+        self.routes += (
+            Route(pattern, func, name),
         )
 
     def find_route(self, path):
@@ -41,13 +42,13 @@ PATH_TOKEN_RE = '([^/].*?)'
 
 
 class Route(object):
-    
+
     def __init__(self, pattern, func, name):
         self.pattern = pattern
         self.func = func
         self.name = name
         self.regex_pattern = self.generate_regex_pattern()
-        
+
     def resolve_func(self):
         imported_func = None
         if isinstance(self.func, six.string_types):
@@ -55,7 +56,7 @@ class Route(object):
         elif six.callable(self.func):
             imported_func = self.func
         return imported_func
-        
+
     def get_args(self, path):
         match = re.search(self.regex_pattern, path)
         args = match.groups()
@@ -100,5 +101,3 @@ class Route(object):
                 '{%s}' % str(token_list[i]), str(args[i])
             )
         return reversed_pattern
-
-

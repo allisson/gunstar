@@ -1,22 +1,28 @@
 # -*- coding: utf-8 -*-
 import unittest
+import os
 from gunstar.app import Application
 from gunstar.routing import Router
 from gunstar.config import Config
 from gunstar.http import Request, Response
 
 
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+
+
 class TestConfig(object):
 
     KEY1 = 'key1'
     key2 = 'key2'
+    STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
+    STATIC_PATH = '/static/'
 
 
 class ApplicationTestCase(unittest.TestCase):
 
     def setUp(self):
         self.app = Application()
-    
+
     def test_init(self):
         self.assertTrue(
             isinstance(self.app.router, Router)
@@ -41,4 +47,4 @@ class ApplicationTestCase(unittest.TestCase):
         resp = req.get_response(self.app)
         self.assertTrue(isinstance(resp, Response))
         self.assertEqual(resp.status_code, 404)
-        self.assertTrue('Not Found /article' in  resp.text)
+        self.assertTrue('Not Found /article' in resp.text)

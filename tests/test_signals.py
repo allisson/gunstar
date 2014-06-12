@@ -2,7 +2,10 @@
 from gunstar.app import Application
 from gunstar.http import RequestHandler
 from gunstar.testing import TestCase
-from gunstar.signals import *
+from gunstar.signals import (
+    request_started_signal, request_finished_signal,
+    request_exception_signal, template_rendered_signal
+)
 import os
 
 
@@ -10,18 +13,21 @@ PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 class Handler1(RequestHandler):
+
     def get(self):
         self.response.write('handler1')
 
 
 class Handler2(RequestHandler):
+
     def get(self):
         self.render_template('index.html', name='allisson')
 
 
 class Handler3(RequestHandler):
+
     def get(self):
-        self.reponse.write(var)
+        self.reponse.write('Hello')
 
 
 class Settings(object):
@@ -54,7 +60,7 @@ class SignalsTest(TestCase):
 
         request_started_signal.connect(receive_request_started_signal)
 
-        resp = self.client.get('/handler1/')
+        self.client.get('/handler1/')
         self.assertTrue(self.signal_received)
         self.assertEqual(self.signal_received['app'], self.app)
         self.assertEqual(
@@ -62,7 +68,7 @@ class SignalsTest(TestCase):
             '/handler1/'
         )
 
-        resp = self.client.get('/handler2/')
+        self.client.get('/handler2/')
         self.assertTrue(self.signal_received)
         self.assertEqual(self.signal_received['app'], self.app)
         self.assertEqual(
@@ -70,7 +76,7 @@ class SignalsTest(TestCase):
             '/handler2/'
         )
 
-        resp = self.client.get('/handler3/')
+        self.client.get('/handler3/')
         self.assertTrue(self.signal_received)
         self.assertEqual(self.signal_received['app'], self.app)
         self.assertEqual(
@@ -106,7 +112,7 @@ class SignalsTest(TestCase):
 
         request_exception_signal.connect(receive_request_exception_signal)
 
-        resp = self.client.get('/handler3/')
+        self.client.get('/handler3/')
         self.assertTrue(self.signal_received)
         self.assertEqual(self.signal_received['app'], self.app)
         self.assertEqual(

@@ -5,7 +5,7 @@ from itsdangerous import URLSafeTimedSerializer, BadSignature
 class Session(object):
 
     salt = 'cookie-session'
-    
+
     def __init__(self, app, request, response):
         self.app = app
         self.request = request
@@ -14,10 +14,16 @@ class Session(object):
         self.cleared = False
         self.secret_key = self.app.config.get('SECRET_KEY')
         self.session_cookie_name = self.app.config.get('SESSION_COOKIE_NAME')
-        self.session_cookie_domain = self.app.config.get('SESSION_COOKIE_DOMAIN')
+        self.session_cookie_domain = self.app.config.get(
+            'SESSION_COOKIE_DOMAIN'
+        )
         self.session_cookie_path = self.app.config.get('SESSION_COOKIE_PATH')
-        self.session_cookie_httponly = self.app.config.get('SESSION_COOKIE_HTTPONLY')
-        self.session_cookie_secure = self.app.config.get('SESSION_COOKIE_SECURE')
+        self.session_cookie_httponly = self.app.config.get(
+            'SESSION_COOKIE_HTTPONLY'
+        )
+        self.session_cookie_secure = self.app.config.get(
+            'SESSION_COOKIE_SECURE'
+        )
         self.max_age = self.app.config.get('PERMANENT_SESSION_LIFETIME')
         self.data = {}
 
@@ -39,13 +45,13 @@ class Session(object):
     def get_session(self):
         if not self.secret_key:
             return
-        
+
         s = self.get_serializer()
         cookie_value = self.request.cookies.get(self.session_cookie_name)
-        
+
         if not cookie_value:
             return
-        
+
         try:
             self.data = s.loads(cookie_value, max_age=self.get_max_age())
         except BadSignature:

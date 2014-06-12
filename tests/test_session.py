@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
+from six.moves import http_cookies
+
 from gunstar.app import Application
 from gunstar.session import Session
 from gunstar.http import RequestHandler, Request, Response
 from gunstar.testing import TestCase
-from six.moves import http_cookies
-
 
 
 class Handler(RequestHandler):

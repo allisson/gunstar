@@ -13,4 +13,3 @@ def import_from_string(import_string):
         return func
     except:
         return import_module(import_string)
-

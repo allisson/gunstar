@@ -19,7 +19,7 @@ class ConfigTestCase(unittest.TestCase):
         self.assertTrue('KEY1' in config)
         self.assertFalse('key2' in config)
         self.assertFalse('Key3' in config)
-        
+
         config = Config()
         config.load_from_object('tests.resources.config_settings.Settings')
         self.assertTrue('KEY1' in config)

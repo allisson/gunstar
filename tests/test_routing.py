@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
+
 from gunstar.routing import Router, Route
 from gunstar.http import RequestHandler
 
@@ -17,24 +18,24 @@ routes = (
 
 
 class RouterTestCase(unittest.TestCase):
-    
+
     def setUp(self):
         self.router = Router()
 
     def test_init(self):
         router = Router(routes)
-        
+
         route = router.find_route('/')
         self.assertTrue(route)
         self.assertTrue(isinstance(route, Route))
-        
+
         route = router.find_route('/name/allisson/')
         self.assertTrue(route)
         self.assertTrue(isinstance(route, Route))
 
         route = router.find_route('/other/url')
         self.assertFalse(route)
-    
+
     def test_add_route(self):
         self.assertEqual(len(self.router.routes), 0)
         self.router.add_route('/', Handler, 'handler')
@@ -42,24 +43,24 @@ class RouterTestCase(unittest.TestCase):
         self.assertTrue(
             isinstance(self.router.routes[0], Route)
         )
-        
+
     def test_find_route(self):
         self.router.add_route('/', Handler, 'index')
         self.router.add_route('/contact/', Handler, 'contact')
         self.router.add_route('/posts/{slug:slug}/', Handler, 'post_detail')
-        
+
         route = self.router.find_route('/')
         self.assertTrue(route)
         self.assertTrue(isinstance(route, Route))
-        
+
         route = self.router.find_route('/contact/')
         self.assertTrue(route)
         self.assertTrue(isinstance(route, Route))
-        
+
         route = self.router.find_route('/posts/my-post/')
         self.assertTrue(route)
         self.assertTrue(isinstance(route, Route))
-        
+
         route = self.router.find_route('/other/url')
         self.assertFalse(route)
 
@@ -85,7 +86,7 @@ class RouterTestCase(unittest.TestCase):
 
         route = self.router.find_route_by_name('other_url')
         self.assertFalse(route)
-        
+
 
 class RouteTestCase(unittest.TestCase):
 
@@ -135,26 +136,28 @@ class RouteTestCase(unittest.TestCase):
     def test_resolve_func(self):
         route = Route('/', Handler, 'index')
         self.assertEqual(route.resolve_func(), Handler)
-        
+
         from gunstar.utils import import_from_string
         route = Route(
             '/crazy/handler/',
-            'gunstar.utils.import_from_string', 
+            'gunstar.utils.import_from_string',
             'crazy_handler'
         )
         self.assertEqual(route.resolve_func(), import_from_string)
-        
+
     def test_get_args(self):
         route = Route('/', Handler, 'index')
         args = route.get_args('/')
         self.assertFalse(args)
-        
+
         route = Route('/posts/{slug:slug}/', Handler, 'index')
         args = route.get_args('/posts/my-post/')
         self.assertTrue(args)
         self.assertTrue('my-post' in args)
 
-        route = Route('/posts/{id:int}/author/{name:string}/', Handler, 'index')
+        route = Route(
+            '/posts/{id:int}/author/{name:string}/', Handler, 'index'
+        )
         args = route.get_args('/posts/1/author/allisson/')
         self.assertTrue(args)
         self.assertTrue('1' in args)
@@ -178,7 +181,9 @@ class RouteTestCase(unittest.TestCase):
         self.assertEqual(
             route.reverse_route('my-post'), '/posts/my-post/')
 
-        route = Route('/posts/{id:int}/author/{name:string}/', Handler, 'index')
+        route = Route(
+            '/posts/{id:int}/author/{name:string}/', Handler, 'index'
+        )
         self.assertEqual(
             route.reverse_route(12, 'allisson'), '/posts/12/author/allisson/')
 

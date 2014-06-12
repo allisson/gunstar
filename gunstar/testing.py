@@ -2,13 +2,13 @@
 import unittest
 import six
 from six.moves import http_cookies
-from gunstar.http import Request
-from gunstar.signals import template_rendered_signal
-
 try:
     from urllib.parse import urlencode
 except ImportError:
     from urllib import urlencode
+
+from gunstar.http import Request
+from gunstar.signals import template_rendered_signal
 
 
 class Client(object):
@@ -23,24 +23,38 @@ class Client(object):
     def get(self, path, data={}, headers={}):
         return self.get_request(path, data=data, headers=headers)
 
-    def post(self, path, data={}, headers={}, content_type='application/x-www-form-urlencoded'):
-        return self.post_request(path, data=data, headers=headers, 
-            content_type=content_type, method='POST')
+    def post(self, path, data={}, headers={},
+             content_type='application/x-www-form-urlencoded'):
+        return self.post_request(
+            path, data=data, headers=headers,
+            content_type=content_type, method='POST'
+        )
 
-    def put(self, path, data={}, headers={}, content_type='application/octet-stream'):
-        return self.post_request(path, data=data, headers=headers, 
-            content_type=content_type, method='PUT')
+    def put(self, path, data={}, headers={},
+            content_type='application/octet-stream'):
+        return self.post_request(
+            path, data=data, headers=headers,
+            content_type=content_type, method='PUT'
+        )
 
-    def delete(self, path, data={}, headers={}, content_type='application/octet-stream'):
-        return self.post_request(path, data=data, headers=headers, 
-            content_type=content_type, method='DELETE')
+    def delete(self, path, data={}, headers={},
+               content_type='application/octet-stream'):
+        return self.post_request(
+            path, data=data, headers=headers,
+            content_type=content_type, method='DELETE'
+        )
 
-    def options(self, path, data={}, headers={}, content_type='application/octet-stream'):
-        return self.post_request(path, data=data, headers=headers, 
-            content_type=content_type, method='OPTIONS')
+    def options(self, path, data={}, headers={},
+                content_type='application/octet-stream'):
+        return self.post_request(
+            path, data=data, headers=headers,
+            content_type=content_type, method='OPTIONS'
+        )
 
     def head(self, path, data={}, headers={}):
-        return self.get_request(path, data=data, headers=headers, method='HEAD') 
+        return self.get_request(
+            path, data=data, headers=headers, method='HEAD'
+        )
 
     def get_request(self, path, data={}, headers={}, method='GET'):
         if data:
@@ -54,10 +68,11 @@ class Client(object):
         resp.request_started = req
         resp.template = self.template
         resp.context = self.context
-        self.template = self.context= None
+        self.template = self.context = None
         return resp
 
-    def post_request(self, path, data={}, headers={}, content_type='', method='POST'):
+    def post_request(self, path, data={}, headers={}, content_type='',
+                     method='POST'):
         req = Request.blank(path)
         req.content_type = content_type
         req.method = method
@@ -69,7 +84,7 @@ class Client(object):
         resp.request_started = req
         resp.template = self.template
         resp.context = self.context
-        self.template = self.context= None
+        self.template = self.context = None
         return resp
 
     def store_cookies(self, resp):
@@ -85,7 +100,8 @@ class Client(object):
         for key in self.cookies:
             req.cookies[key] = self.cookies[key]
 
-    def receive_template_rendered_signal(self, app, handler, template, context):
+    def receive_template_rendered_signal(self, app, handler, template,
+                                         context):
         self.template = template
         self.context = context
 
@@ -102,4 +118,3 @@ class TestCase(unittest.TestCase):
     def __call__(self, result=None):
         self._pre_setup()
         super(TestCase, self).__call__(result)
-

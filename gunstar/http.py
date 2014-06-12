@@ -1,21 +1,29 @@
 # -*- coding: utf-8 -*-
-from webob import Request, Response
-from webob.static import DirectoryApp
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
+from webob import Request as WebObRequest, Response as WebObResponse
+from webob.static import DirectoryApp as WebObDirectoryApp
 import traceback
+import os.path
+
 from gunstar.session import Session
 from gunstar.template import linebreaks, linebreaksbr
 from gunstar.signals import template_rendered_signal
-import os.path
 
 
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 GUNSTAR_TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
 
 
+Request = WebObRequest
+Response = WebObResponse
+DirectoryApp = WebObDirectoryApp
+
+
 class RequestHandler(object):
 
-    http_method_names = ['get', 'post', 'put', 'delete', 'head', 'options', 'trace']
+    http_method_names = [
+        'get', 'post', 'put', 'delete', 'head', 'options', 'trace'
+    ]
 
     def __init__(self, app, request, response):
         self.app = app
@@ -30,19 +38,19 @@ class RequestHandler(object):
     def dispatch(self, *args, **kwargs):
         # call before dispatch
         self.before_dispatch()
-        
+
         # flag to control method not allowed error
         handler_executed = False
 
         if self.request.method.lower() in self.http_method_names:
             handler = getattr(self, self.request.method.lower(), None)
             if handler:
-                handler_executed = True                
+                handler_executed = True
                 handler(*args, **kwargs)
 
         if not handler_executed:
             self.abort(405, 'Method Not Allowed.')
-        
+
         # call after dispatch
         self.after_dispatch()
 
@@ -73,7 +81,10 @@ class RequestHandler(object):
         return template_globals
 
     def get_template_filters(self):
-        template_filters = {'linebreaks': linebreaks, 'linebreaksbr': linebreaksbr}
+        template_filters = {
+            'linebreaks': linebreaks,
+            'linebreaksbr': linebreaksbr
+        }
         return template_filters
 
     def create_template_env(self):
@@ -111,7 +122,6 @@ class RequestHandler(object):
         return url
 
 
-
 class NotFoundHandler(RequestHandler):
 
     def get(self):
@@ -123,5 +133,6 @@ class ErrorHandler(RequestHandler):
 
     def get(self, exc_info):
         self.response.status = 500
-        self.render_template('500.html', traceback=traceback.format_exception(*exc_info))
-
+        self.render_template(
+            '500.html', traceback=traceback.format_exception(*exc_info)
+        )

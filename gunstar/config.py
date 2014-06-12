@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import six
 from datetime import timedelta
+
 from gunstar.utils import import_from_string
 
 
 class DefaultConfig(object):
-    
+
     DEBUG = True
     TESTING = False
 

@@ -15,6 +15,10 @@
 
       <div class="page-header">
         <h1>Index Page</h1>
+        {% if message %}
+        {{ message|linebreaks }}
+        {{ message|linebreaksbr }}
+        {% endif %}
       </div>
 
     </div><!-- /.container -->
