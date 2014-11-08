@@ -44,18 +44,18 @@ class Session(object):
 
     def get_session(self):
         if not self.secret_key:
-            return
+            return None
 
         s = self.get_serializer()
         cookie_value = self.request.cookies.get(self.session_cookie_name)
 
         if not cookie_value:
-            return
+            return None
 
         try:
             self.data = s.loads(cookie_value, max_age=self.get_max_age())
         except BadSignature:
-            return
+            return None
 
     def get(self, key, default=None):
         return self.data.get(key, default)
@@ -74,7 +74,7 @@ class Session(object):
 
     def save(self):
         if not self.secret_key:
-            return
+            return None
 
         if self.cleared:
             self.response.delete_cookie(
@@ -95,4 +95,4 @@ class Session(object):
                 secure=self.session_cookie_secure,
                 httponly=self.session_cookie_httponly
             )
-        return
+        return None

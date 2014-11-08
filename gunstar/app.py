@@ -4,7 +4,7 @@ import sys
 from gunstar.http import Request, Response, DirectoryApp
 from gunstar.routing import Router
 from gunstar.config import Config, DefaultConfig
-from gunstar.utils import import_from_string
+from gunstar.utils import import_object
 from gunstar.signals import (
     request_started_signal, request_finished_signal, request_exception_signal
 )
@@ -25,10 +25,10 @@ class Application(object):
         self.set_static_route()
 
         # handlers for 404 and 500
-        self.handler404 = import_from_string(
+        self.handler404 = import_object(
             self.config.get('HANDLER_FOR_404')
         )
-        self.handler500 = import_from_string(
+        self.handler500 = import_object(
             self.config.get('HANDLER_FOR_500')
         )
 

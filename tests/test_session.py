@@ -15,6 +15,12 @@ class Handler(RequestHandler):
         self.response.write('Hello')
 
 
+class Handler2(RequestHandler):
+
+    def get(self):
+        self.response.write('Hello {0}'.format(self.session.get('name')))
+
+
 class Settings(object):
 
     SECRET_KEY = 'my-secret'
@@ -22,6 +28,7 @@ class Settings(object):
 
 routes = (
     ('/', Handler, 'index'),
+    ('/index2/', Handler2, 'index2'),
 )
 
 
@@ -36,11 +43,11 @@ class SessionTest(TestCase):
 
     def load_cookie(self, resp):
         cookie = http_cookies.SimpleCookie()
-        cookie.load(resp.headers['Set-Cookie'])
-        return cookie
-
-    def load_signed_cookie(self, cookie_value):
-        pass
+        try:
+            cookie.load(resp.headers['Set-Cookie'])
+            return cookie
+        except KeyError:
+            return None
 
     def test_get_cookie_domain(self):
         resp = self.client.get('/')
@@ -70,6 +77,12 @@ class SessionTest(TestCase):
         resp = self.client.get('/')
         cookie = self.load_cookie(resp)
         self.assertTrue('gsessionid' in cookie)
+
+        self.client.cookies['gsessionid'] = 'invalid-cookie'
+        resp = self.client.get('/index2/')
+        self.assertEqual(resp.text, 'Hello None')
+        cookie = self.load_cookie(resp)
+        self.assertFalse(cookie)
 
     def test_get_set_clear_delete(self):
         request = Request.blank('/')

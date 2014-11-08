@@ -42,9 +42,19 @@ class ApplicationTestCase(unittest.TestCase):
         self.assertTrue(self.app.router.find_route('/test/'))
 
     def test_call(self):
+        self.app.load_config(TestConfig)
         req = Request.blank('/article?id=1')
 
         resp = req.get_response(self.app)
         self.assertTrue(isinstance(resp, Response))
         self.assertEqual(resp.status_code, 404)
         self.assertTrue('Not Found /article' in resp.text)
+
+    def test_static_call(self):
+        self.app.load_config(TestConfig)
+        req = Request.blank('/static/readme.txt')
+
+        resp = req.get_response(self.app)
+        self.assertTrue(isinstance(resp, Response))
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('Hello tests!' in resp.text)

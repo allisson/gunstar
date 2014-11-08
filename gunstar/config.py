@@ -2,7 +2,7 @@
 import six
 from datetime import timedelta
 
-from gunstar.utils import import_from_string
+from gunstar.utils import import_object
 
 
 class DefaultConfig(object):
@@ -29,7 +29,7 @@ class Config(dict):
 
     def load_from_object(self, obj):
         if isinstance(obj, six.string_types):
-            obj = import_from_string(obj)
+            obj = import_object(obj)
         for key in dir(obj):
             if key.isupper():
                 self[key] = getattr(obj, key)

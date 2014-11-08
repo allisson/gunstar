@@ -2,7 +2,7 @@
 import re
 import six
 
-from gunstar.utils import import_from_string
+from gunstar.utils import import_object
 
 
 class Router(object):
@@ -52,7 +52,7 @@ class Route(object):
     def resolve_func(self):
         imported_func = None
         if isinstance(self.func, six.string_types):
-            imported_func = import_from_string(self.func)
+            imported_func = import_object(self.func)
         elif six.callable(self.func):
             imported_func = self.func
         return imported_func
@@ -95,7 +95,7 @@ class Route(object):
         reversed_pattern = self.pattern
         token_list = self.get_token_from_pattern()
         if len(token_list) != len(args):
-            return
+            return None
         for i in range(len(token_list)):
             reversed_pattern = reversed_pattern.replace(
                 '{%s}' % str(token_list[i]), str(args[i])

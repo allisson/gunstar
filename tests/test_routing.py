@@ -137,13 +137,13 @@ class RouteTestCase(unittest.TestCase):
         route = Route('/', Handler, 'index')
         self.assertEqual(route.resolve_func(), Handler)
 
-        from gunstar.utils import import_from_string
+        from gunstar.utils import import_object
         route = Route(
             '/crazy/handler/',
-            'gunstar.utils.import_from_string',
+            'gunstar.utils.import_object',
             'crazy_handler'
         )
-        self.assertEqual(route.resolve_func(), import_from_string)
+        self.assertEqual(route.resolve_func(), import_object)
 
     def test_get_args(self):
         route = Route('/', Handler, 'index')
@@ -194,3 +194,7 @@ class RouteTestCase(unittest.TestCase):
         route = Route('/wiki/{name:path}/', Handler, 'index')
         self.assertEqual(
             route.reverse_route('Allisson/Detail'), '/wiki/Allisson/Detail/')
+        self.assertEqual(
+            route.reverse_route('Allisson/Detail', 'otherargs'),
+            None
+        )
